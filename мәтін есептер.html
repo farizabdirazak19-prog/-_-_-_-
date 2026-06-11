@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>	Электрондық оқулық: Мәтіндік есептер</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+    <style>
+        :root {
+            --primary: #4e54c8;
+            --secondary: #8f94fb;
+            --success: #2ecc71;
+            --warning: #f1c40f;
+            --danger: #e74c3c;
+            --dark: #2c3e50;
+            --light: #f8f9fa;
+            --gradient-1: linear-gradient(135deg, #4e54c8, #8f94fb);
+            --gradient-2: linear-gradient(135deg, #11998e, #38ef7d);
+            --gradient-3: linear-gradient(135deg, #ff9966, #ff5e62);
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f0f4f8;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* Анимациялар */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .pulse-effect { animation: pulse 2s infinite; }
+        .float-effect { animation: float 3s infinite ease-in-out; }
+
+        /* Басты бет стилі */
+        .hero-section {
+            background: var(--gradient-1);
+            color: white;
+            border-radius: 0 0 50px 50px;
+            padding: 60px 20px;
+            box-shadow: 0 10px 30px rgba(78, 84, 200, 0.3);
+        }
+
+        /* Навигациялық панель */
+        .sidebar {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 20px;
+        }
+        .nav-pills .nav-link {
+            color: var(--dark);
+            font-weight: 600;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        .nav-pills .nav-link.active {
+            background: var(--gradient-1);
+            box-shadow: 0 4px 10px rgba(78, 84, 200, 0.2);
+        }
+
+        /* Карточкалар мен блоктар */
+        .custom-card {
+            background: white;
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            transition: transform 0.3s;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        .custom-card:hover {
+            transform: translateY(-3px);
+        }
+        .card-header-gradient {
+            background: var(--gradient-1);
+            color: white;
+            padding: 15px 20px;
+            font-weight: 700;
+        }
+        .card-header-gradient.g2 { background: var(--gradient-2); }
+        .card-header-gradient.g3 { background: var(--gradient-3); }
+
+        /* Геймификация және Жетістіктер */
+        .star-rating i {
+            color: #eea849;
+            font-size: 1.5rem;
+        }
+        .progress {
+            height: 15px;
+            border-radius: 10px;
+            background-color: #e9ecef;
+        }
+        .progress-bar {
+            background: var(--gradient-2);
+            border-radius: 10px;
+        }
+
+        /* Интерактив элементтер */
+        .formula-box {
+            background: #fdf2e9;
+            border-left: 5px solid #ff9966;
+            padding: 15px;
+            border-radius: 0 15px 15px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .drop-zone {
+            min-height: 60px;
+            background: #edf2f7;
+            border: 2px dashed #cbd5e0;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .drag-item {
+            background: var(--gradient-1);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: grab;
+            user-select: none;
+            font-weight: 600;
+        }
+        .match-card {
+            cursor: pointer;
+            border: 2px solid #e2e8f0;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            background: white;
+            transition: all 0.2s;
+        }
+        .match-card.selected {
+            border-color: var(--primary);
+            background: #ebf8ff;
+        }
+        .match-card.correct {
+            border-color: var(--success);
+            background: #f0fff4;
+        }
+
+        /* ЭЙЛЕР-ВЕНН ШЕҢБЕРЛЕРІНІҢ CSS СЫЗБАСЫ */
+        .venn-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            position: relative;
+            height: 220px;
+        }
+        .venn-circle {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: absolute;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .venn-a {
+            background: rgba(78, 84, 200, 0.25);
+            border: 3px solid #4e54c8;
+            left: calc(50% - 130px);
+            align-items: flex-start;
+            padding-left: 25px;
+            color: #4e54c8;
+        }
+        .venn-b {
+            background: rgba(231, 76, 60, 0.25);
+            border: 3px solid #e74c3c;
+            right: calc(50% - 130px);
+            align-items: flex-end;
+            padding-right: 25px;
+            color: #e74c3c;
+        }
+        .venn-intersection {
+            position: absolute;
+            left: calc(50% - 40px);
+            width: 80px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #2c3e50;
+            z-index: 10;
+            text-align: center;
+        }
+        .venn-label-top {
+            position: absolute;
+            top: 5px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .feedback {
+            font-weight: 600;
+            margin-top: 10px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section { border-radius: 0; }
+            .sidebar { margin-bottom: 20px; }
+            .venn-container { transform: scale(0.8); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero-section text-center mb-4">
+        <div class="container">
+            <h1 class="display-5 fw-bold mb-3 float-effect"><i class="fas fa-graduation-cap me-2"></i>Мәтіндік есептер әлемі</h1>
+            <p class="lead fw-600">5-сынып оқушыларына арналған интерактивті электрондық мультимедиалық оқулық</p>
+            <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+                <button class="btn btn-warning btn-lg rounded-pill fw-bold text-dark shadow pulse-effect" onclick="switchMainTab('main-page')"><i class="fas fa-home me-2"></i>Басты бет</button>
+                <button class="btn btn-light btn-lg rounded-pill fw-bold text-primary shadow" onclick="switchMainTab('content-page')"><i class="fas fa-book-open me-2"></i>Оқулықты бастау</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mb-5">
+        
+        <div id="main-page-view" class="main-tab-view">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="custom-card p-4 text-center" style="background: linear-gradient(135deg, #ffffff, #f1f2b5);">
+                        <h4 class="fw-bold mb-3 text-primary"><i class="fas fa-trophy me-2 text-warning"></i>Сенің оқу жетістігің</h4>
+                        <div class="row align-items-center">
+                            <div class="col-md-4 mb-2">
+                                <span class="fw-bold">Деңгей: </span><span id="global-rank" class="badge bg-primary fs-6">Бастаушы</span>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <span class="fw-bold">Жинаған жұлдыздарың: </span>
+                                <span class="star-rating"><i class="fas fa-star"></i> <span id="global-stars" class="fw-bold text-dark">0</span></span>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <span class="fw-bold">Жалпы ұпай: </span><span id="global-score" class="badge bg-success fs-6">0 ұпай</span>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <div class="d-flex justify-content-between mb-1"><span class="small fw-bold">Жалпы прогресс</span><span id="progress-percent" class="small fw-bold">0%</span></div>
+                            <div class="progress"><div id="main-progress-bar" class="progress-bar" role="progressbar" style="width: 0%"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="custom-card p-4">
+                        <h3 class="fw-bold text-primary mb-3"><i class="fas fa-info-circle me-2"></i>Оқулық туралы ақпарат</h3>
+                        <p class="fs-5">Бұл интерактивті оқулық математикалық мәтіндік есептерді тез, әрі қызықты түрде үйренуге көмектеседі. Көрнекі сызбалар мен шеңберлер арқылы күрделі есептерді оңай меңгересің.</p>
+                        
+                        <h4 class="fw-bold text-success mt-4 mb-3"><i class="fas fa-compass me-2"></i>Пайдалану нұсқаулығы</h4>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item bg-transparent"><i class="fas fa-check-circle text-success me-2"></i><strong>Теорияны оқы:</strong> Әр бөлімнің ережелері мен формулаларын мұқият зерделе.</li>
+                            <li class="list-group-item bg-transparent"><i class="fas fa-check-circle text-success me-2"></i><strong>Сызбаларға қара:</strong> Эйлер-Венн шеңберлерін бақылап, логикасын түсін.</li>
+                            <li class="list-group-item bg-transparent"><i class="fas fa-check-circle text-success me-2"></i><strong>Тапсырмаларды орында:</strong> Сүйреп апару, сәйкестендіру арқылы біліміңді тексер.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="custom-card p-4 text-center h-100 d-flex flex-column justify-content-center" style="border-top: 5px solid var(--primary);">
+                        <div class="mb-3"><i class="fas fa-user-tie fa-4x text-primary float-effect"></i></div>
+                        <h4 class="fw-bold mb-1">Дипломдық жоба</h4>
+                        <p class="text-muted small">Әзірлеуші: МиИ-22-1к тобының студенті Амангелді Аида</p>
+                        <hr>
+                        <p class="fst-italic text-secondary">"Мәтіндік есептерді шешуге арналған қосымша оқыту құралдарын жасау тәсілдері" тақырыбы аясында дайындалған.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="fw-bold my-4 text-center">Оқу бағыттарын таңда:</h3>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="custom-card text-center p-4 h-100" style="border-bottom: 5px solid var(--primary);">
+                        <i class="fas fa-tools fa-3x text-primary mb-3"></i>
+                        <h5 class="fw-bold">Бірлескен жұмыс есептері</h5>
+                        <p class="small text-muted">Бірлесіп атқарылатын жұмыстар, өнімділік пен уақытты есептеу.</p>
+                        <button class="btn btn-primary w-100 rounded-pill" onclick="openSectionDirectly('nav-work-tab')">Бастау</button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="custom-card text-center p-4 h-100" style="border-bottom: 5px solid var(--success);">
+                        <i class="fas fa-percentage fa-3x text-success mb-3"></i>
+                        <h5 class="fw-bold">Пайыздарға қатысты есептер</h5>
+                        <p class="small text-muted">Бөлшектерді пайызға айналдыру, санның пайызын және жеңілдіктерді табу.</p>
+                        <button class="btn btn-success w-100 rounded-pill" onclick="openSectionDirectly('nav-percent-tab')">Бастау</button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="custom-card text-center p-4 h-100" style="border-bottom: 5px solid var(--warning);">
+                        <i class="fas fa-layer-group fa-3x text-warning mb-3"></i>
+                        <h5 class="fw-bold">Жиындарға байланысты есептер</h5>
+                        <p class="small text-muted">Эйлер-Венн дөңгелектері, жиындардың бірігуі мен қиылысуы.</p>
+                        <button class="btn btn-warning w-100 rounded-pill text-dark" onclick="openSectionDirectly('nav-sets-tab')">Бастау</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="content-page-view" class="main-tab-view" style="display: none;">
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <div class="sidebar">
+                        <h5 class="fw-bold mb-3 text-center text-primary"><i class="fas fa-book me-2"></i>Бөлімдер:</h5>
+                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist">
+                            <button class="nav-link active" id="nav-work-tab" data-bs-toggle="pill" data-bs-target="#nav-work" type="button" role="tab"><i class="fas fa-tools me-2"></i>1. Бірлескен жұмыс</button>
+                            <button class="nav-link" id="nav-percent-tab" data-bs-toggle="pill" data-bs-target="#nav-percent" type="button" role="tab"><i class="fas fa-percentage me-2"></i>2. Пайыздар</button>
+                            <button class="nav-link" id="nav-sets-tab" data-bs-toggle="pill" data-bs-target="#nav-sets" type="button" role="tab"><i class="fas fa-layer-group me-2"></i>3. Жиындар</button>
+                        </div>
+                        <hr>
+                        <button class="btn btn-outline-secondary btn-sm w-100 rounded-pill" onclick="switchMainTab('main-page')"><i class="fas fa-arrow-left me-1"></i>Басты бетке қайту</button>
+                    </div>
+                </div>
+
+                <div class="col-md-9">
+                    <div class="tab-content" id="v-pills-tabContent">
+                        
+                        <div class="tab-pane fade show active" id="nav-work" role="tabpanel">
+                            <h2 class="fw-bold text-primary mb-4">1-бөлім: Бірлесіп орындалатын жұмыстарға қатысты есептер</h2>
+                            
+                            <div class="custom-card">
+                                <div class="card-header-gradient">1.1 Теориялық түсініктеме</div>
+                                <div class="card-body">
+                                    <p class="fs-5">Егер бірнеше адам немесе аспап бірлесіп жұмыс істесе, олардың атқаратын жұмысы мен өнімділігі біріктіріледі.</p>
+                                    <div class="formula-box my-3 text-center">
+                                        Жұмыс формуласы: $$A = v \cdot t$$
+                                        Мұндағы: $A$ – атқарылған жұмыс, $v$ – жұмыс өнімділігі (жылдамдығы), $t$ – жұмсалған уақыт.
+                                    </div>
+                                    <h5><i class="fas fa-lightbulb text-warning me-2"></i>Маңызды ереже:</h5>
+                                    <p>Егер жұмыстың көлемі нақты белгісіз болса, оны <strong>1 бүтін</strong> деп аламыз. Сонда өнімділік: $$v = \frac{1}{t}$$ Бірлескен өнімділік: $$v_{бірлескен} = v_1 + v_2$$</p>
+                                    
+                                    <table class="table table-bordered mt-3 text-center bg-light">
+                                        <thead class="table-primary"><tr><th>Шама атауы</th><th>Белгіленуі</th><th>Табу формуласы</th></tr></thead>
+                                        <tbody>
+                                            <tr><td>Жұмыс көлемі</td><td>$A$</td><td>$A = v \cdot t$</td></tr>
+                                            <tr><td>Өнімділік</td><td>$v$</td><td>$v = \frac{A}{t}$</td></tr>
+                                            <tr><td>Уақыт</td><td>$t$</td><td>$t = \frac{A}{v}$</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="custom-card">
+                                <div class="card-header-gradient g2">1.2 Үлгі есептер</div>
+                                <div class="card-body">
+                                    <div class="p-3 border-bottom">
+                                        <h6 class="fw-bold text-primary">Есеп №1: Құбырлар</h6>
+                                        <p><strong>Шарт:</strong> Бірінші құбыр хауызды 4 сағатта, ал екінші құбыр 12 сағатта толтырады. Екі құбыр бірге ашылса, хауыз неше сағатта толады?</p>
+                                        <p class="small text-muted"><strong>Шешуі:</strong><br>
+                                        1-қадам: Әр құбырдың 1 сағаттағы өнімділігін табамыз: $v_1 = \frac{1}{4}$, $v_2 = \frac{1}{12}$.<br>
+                                        2-қадам: Бірлескен өнімділік: $$\frac{1}{4} + \frac{1}{12} = \frac{3+1}{12} = \frac{4}{12} = \frac{1}{3}$$<br>
+                                        3-қадам: Жалпы уақыт: $t = 1 : \frac{1}{3} = 3$ сағат.<br>
+                                        <strong>Жауабы:</strong> 3 сағат.</p>
+                                    </div>
+                                    <div class="p-3 border-bottom">
+                                        <h6 class="fw-bold text-primary">Есеп №2: Шебер мен Шәкірт</h6>
+                                        <p><strong>Шарт:</strong> Шебер жұмысты 6 күнде, ал шәкірті 12 күнде бітіреді. Олар бірге істесе, жұмыс неше күнде бітеді?</p>
+                                        <p class="small text-muted"><strong>Шешуі:</strong> Бірлескен өнімділік: $\frac{1}{6} + \frac{1}{12} = \frac{3}{12} = \frac{1}{4}$. Уақыт: $1 : \frac{1}{4} = 4$ күн.<br><strong>Жауабы:</strong> 4 күн.</p>
+                                    </div>
+                                    <div class="p-3 border-bottom">
+                                        <h6 class="fw-bold text-primary">Есеп №3: Екі бригада</h6>
+                                        <p><strong>Шарт:</strong> Екі бригада жолды 6 күнде жөндеп бітірді. Бірінші бригада жеке өзі 10 күнде бітіретін болса, екінші бригада жеке өзі неше күнде бітіреді?</p>
+                                        <p class="small text-muted"><strong>Шешуі:</strong> Екінші бригада өнімділігі: $\frac{1}{6} - \frac{1}{10} = \frac{5-3}{30} = \frac{2}{30} = \frac{1}{15}$. Демек, 15 күн қажет.<br><strong>Жауабы:</strong> 15 күн.</p>
+                                    </div>
+                                    <div class="p-3 border-bottom">
+                                        <h6 class="fw-bold text-primary">Есеп №4: Есік бояу</h6>
+                                        <p><strong>Шарт:</strong> Әкесі есікті 2 сағатта, ал баласы 6 сағатта бояйды. Бірге жұмыс істесе, 1 сағатта есіктің қандай бөлігін бояп үлгереді?</p>
+                                        <p class="small text-muted"><strong>Шешуі:</strong> $\frac{1}{2} + \frac{1}{6} = \frac{3+1}{6} = \frac{4}{6} = \frac{2}{3}$ бөлігін.<br><strong>Жауабы:</strong> $\frac{2}{3}$.</p>
+                                    </div>
+                                    <div class="p-3">
+                                        <h6 class="fw-bold text-primary">Есеп №5: Кітап түптеу</h6>
+                                        <p><strong>Шарт:</strong> Үш жұмысшы кітаптарды сәйкесінше 12, 15 және 20 сағатта түптейді. Үшеуі бірлессе, жұмысты қанша уақытта аяқтайды?</p>
+                                        <p class="small text-muted"><strong>Шешуі:</strong> Бірлескен өнімділік: $\frac{1}{12} + \frac{1}{15} + \frac{1}{20} = \frac{5+4+3}{60} = \frac{12}{60} = \frac{1}{5}$. Жалпы уақыт: 5 сағат.<br><strong>Жауабы:</strong> 5 сағат.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="custom-card">
+                                <div class="card-header-gradient g3">1.3 Интерактивті бекіту тапсырмалары</div>
+                                <div class="card-body">
+                                    <div class="mb-4 p-3 border rounded">
+                                        <h6><span class="badge bg-primary me-2">№1 Сұрақ</span> Бос орынды толтыр:</h6>
+                                        <p>Жұмыс өнімділігін табу үшін жұмыс көлемін уақытқа <input type="text" id="work-blank-1" class="form-control d-inline-block w-25" placeholder="???"> керек.</p>
+                                        <button class="btn btn-sm btn-primary" onclick="checkWorkBlank()">Тексеру</button>
+                                        <div id="work-blank-feedback" class="feedback"></div>
+                                    </div>
+
+                                    <div class="mb-4 p-3 border rounded">
+                                        <h6><span class="badge bg-primary me-2">№2 Сұрақ</span> Формула элементтерін сәйкес сипаттамасына сүйреп апарыңыз ($A = v \cdot t$):</h6>
+                                        <div class="d-flex gap-2 mb-3">
+                                            <div class="drag-item" draggable="true" id="dragA" ondragstart="drag(event)">A</div>
+                                            <div class="drag-item" draggable="true" id="dragV" ondragstart="drag(event)">v</div>
+                                            <div class="drag-item" draggable="true" id="dragT" ondragstart="drag(event)">t</div>
+                                        </div>
+                                        <div class="row text-center">
+                                            <div class="col-4">
+                                                <div class="small">Өнімділік:</div>
+                                                <div class="drop-zone" id="drop-v" ondrop="drop(event, 'dragV')" ondragover="allowDrop(event)">...</div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="small">Жұмыс көлемі:</div>
+                                                <div class="drop-zone" id="drop-a" ondrop="drop(event, 'dragA')" ondragover="allowDrop(event)">...</div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="small">Уақыт:</div>
+                                                <div class="drop-zone" id="drop-t" ondrop="drop(event, 'dragT')" ondragover="allowDrop(event)">...</div>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-sm btn-primary mt-3" onclick="checkDragWork()">Тексеру</button>
+                                        <div id="work-drag-feedback" class="feedback"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="custom-card">
+                                <div class="card-header-gradient">1.4 Математикалық ойындар аймағы</div>
+                                <div class="card-body">
+                                    <div class="p-3 border rounded mb-3 bg-light">
+                                        <h5 class="text-success fw-bold"><i class="fas fa-hammer me-2"></i>1-ойын: «Құрылысшылар жарысы»</h5>
+                                        <p>Екі жұмысшы бірлесіп дуалды 4 сағатта қалайды. Егер біріншісі жеке өзі 6 сағатта қаласа, екінші жұмысшы жалғыз өзі неше сағатта қалайды?</p>
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-outline-primary fw-bold" onclick="playGame1(8)">8 сағат</button>
+                                            <button class="btn btn-outline-primary fw-bold" onclick="playGame1(12)">12 сағат</button>
+                                            <button class="btn btn-outline-primary fw-bold" onclick="playGame1(10)">10 сағат</button>
+                                        </div>
+                                        <div id="game1-feedback" class="mt-2 fw-bold"></div>
+                                    </div>
+
+                                    <div class="p-3 border rounded bg-light">
+                                        <h5 class="text-success fw-bold"><i class="fas fa-clock me-2"></i>2-ойын: «Уақытты тап»</h5>
+                                        <p>Автоматты қондырғы 1 минутта 5 ойыншық жасайды. Оған 30 ойыншық жасау үшін неше минут қажет?</p>
+                                        <input type="number" id="game2-input" class="form-control w-25 d-inline-block" placeholder="Минут саны">
+                                        <button class="btn btn-success" onclick="playGame2()">Уақытты тап</button>
+                                        <div id="game2-feedback" class="mt-2 fw-bold"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="custom-card">
+                                <div class="card-header-gradient g2">1.5 Бөлім бойынша тест (10 сұрақ)</div>
+                                <div class="card-body" id="work-test-container"></div>
+                                <div class="card-footer bg-white text-center">
+                                    <button class="btn btn-primary rounded-pill px-4" onclick="checkTest('work')">Тестіні аяқтау</button>
+                                    <div id="work-test-result" class="mt-2 fw-bold fs-5 text-success"></div>
+                                </div>
+                            </div>
+
+                            <div class="custom-card">
+                                <div class="card-header-gradient g3">1.6 Ойлауды дамытуға арналған қайталау сұрақтары</div>
+                                <div class="card-body">
+                                    <ol class="list-group list-group-numbered">
+                                        <li class="list-group-item">Егер жұмысшының өнімділігі 2 есе артса, уақыт қалай өзгереді? <br><small class="text-success">Жауабы: 2 есе кемиді.</small></li>
+                                        <li class="list-group-item">Бірлескен өнімділікті қалай табамыз? <br><small class="text-success">Жауабы: Әр жұмысшының өнімділіктерін қосамыз.</small></li>
+                                        <li class="list-group-item">Жұмыс көлемі белгісіз болғанда қандай санды қолданған ыңғайлы? <br><small class="text-success">Жауабы: 1 санын (бүтін жұмыс).</small></li>
+                                        <li class="list-group-item">Үш құбырдың бірлескен өнімділігінің формуласы қандай? <br><small class="text-success">Жауабы: $v_{б} = v_1 + v_2 + v_3$.</small></li>
+                                        <li class="list-group-item">Машина 3 сағатта 150 бөлшек жасаса, оның өнімділігі қандай? <br><small class="text-success">Жауабы: 50 бөлшек/сағат.</small></li>
+                                        <li class="list-group-item">Егер екі адамның өнімділігі бірдей болса, бірлесіп жұмысты жалғыз істегеннен қанша есе тез бітіреді? <br><small class="text-success">Жауабы: 2 есе тез.</small></li>
+                                        <li class="list-group-item">Уақыт тұрақты болғанда, өнімділік артса жұмыс көлемі не істейді? <br><small class="text-success">Жауабы: Артады.</small></li>
+                                        <li class="list-group-item">Шәкірт шеберден 3 есе баяу істейді. Шебердің өнімділігі $v$ болса, шәкірттікі неше? <br><small class="text-success">Жауабы: $v / 3$.</small></li>
+                                        <li class="list-group-item">Толтыру құбыры мен суды сыртқа ағызу құбыры бірге істесе, өнімділіктер қалай есептеледі? <br><small class="text-success">Жауабы: Азайтылады ($v_1 - v_2$).</small></li>
+                                        <li class="list-group-item">Жұмыс толық аяқталғанын білдіретін бөлшек көрсеткіші қандай? <br><small class="text-success">Жауабы: 1.</small></li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="nav-percent" role="tabpanel">
+                            <h2 class="fw-bold text-success mb-4">2-бөлім: Пайыздарға байланысты мәтіндік есептер</h2>
+                            
+                            <div class="custom-card">
+                                <div class="card-header-gradient g2">2.1 Теориялық түсініктеме</div>
+                                <div class="card-body">
+                                    <p class="fs-5"><strong>Пайыз</strong> – бұл кез келген санның жүзден бір ($\frac{1}{100}$) бөлігі. Белгіленуі: <strong>%</strong>.</p>
+                                    <div class="formula-box my-3 text-center" style="background: #e8f8f5; border-left-color: #2ecc71;">
+                                        Санның пайызын табу формуласы: $$B = \frac{A \cdot P}{100}$$
+                                        Мұндағы: $A$ – бастапқы сан (100%), $P$ – пайыз саны, $B$ – пайызға сәйкес мән.
+                                    </div>
+                                    <p>Пайызды бөлшекке айналдыру үшін оны 100-ге бөлеміз: $20\% = \frac{20}{100} = 0,2$.</p>
+                                </div>
+                            </div>
+
+                            <div class="custom-card">
+                                <div class="card-header-gradient g3">2.2 Үлгі есептер</div>
+                                <div class="card-body">
+                                    <div class="p-3 border-bottom">
+                                        <h6 class="fw-bold text-success">Есеп №1: Дүкендегі жеңілдік</h6>
+                                        <p><strong>Шарт:</strong> Сөмкенің бағасы 5000 теңге. Дүкен оған 20% жеңілдік жасады. Сөмке қанша теңгеге арзандады?</p>
+                                        <p class="small text-muted"><strong>Шешуі:</strong> $$5000 \cdot \frac{20}{100} = 50 \cdot 20 = 1000 \text{ теңге}$$<br><strong>Жауабы:</strong> 1000 теңге.</p>
+                                    </div>
+                                    <div class="p-3 border-bottom">
+                                        <h6 class="fw-bold text-success">Есеп №2: Сыныптағы қыздар</h6>
+                                        <p><strong>Шарт:</strong> Сыныпта 30 оқушы бар. Олардың 40%-ы қыздар. Сыныпта неше қыз бала бар?</p>
+                                        <p class="small text-muted"><strong>Шешуі:</strong> $30 \cdot \frac{40}{100} = 12$ қыз.<br><strong>Жауабы:</strong> 12 қыз.</p>
+                                    </div>
+                                    <div class="p-3 border-bottom">
+                                        <h6 class="fw-bold text-success">Есеп №3: Пайыз бойынша санды табу</h6>
+                                        <p><strong>Шарт:</strong> Кітаптың 60 бетін оқыды, бұл барлық кітаптың 30%-ын құрайды. Кітапта барлығы неше бет бар?</p>
+                                        <p class="small text-muted"><strong>Шешуі:</strong> $$60 : 30 \cdot 100 = 200 \text{ бет}$$<br><strong>Жауабы:</strong> 200 бет.</p>
+                                    </div>
+                                    <div class="p-3 border-bottom">
+                                        <h6 class="fw-bold text-success">Есеп №4: Жеміс бағы</h6>
+                                        <p><strong>Шарт:</strong> Бақта 400 aғаш бар. Оның 15%-ы алма ағаштары. Неше алма ағашы бар?</p>
+                                        <p class="small text-muted"><strong>Шешуі:</strong> $400 \cdot \frac{15}{100} = 60$ ағаш.<br><strong>Жауабы:</strong> 60 ағаш.</p>
+                                    </div>
+                                    <div class="p-3">
+                                        <h6 class="fw-bold text-success">Есеп №5: Тәтті су</h6>
+                                        <p><strong>Шарт:</strong> 200 грамм тәтті судың 10%-ы қанттан тұрады. Суда қанша грамм қант бар?</p>
+                                        <p class="small text-muted"><strong>Шешуі:</strong> $200 \cdot \frac{10}{100} = 20$ грамм.<br><strong>Жауабы:</strong> 20 грамм.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="custom-card">
+                                <div class="card-header-gradient">2.3 Интерактивті бекіту тапсырмалары</div>
+                                <div class="card-body">
+                                    <div class="mb-4 p-3 border rounded">
+                                        <h6><span class="badge bg-success">Тапсырма №1</span> Бөлшектер мен пайыздарды сәйкестендір:</h6>
+                                        <div class="row g-2 text-center" id="percent-match-zone">
+                                            <div class="col-6"><div class="match-card" data-type="left" data-val="1/2">$\frac{1}{2}$ бөлігі</div></div>
+                                            <div class="col-6"><div class="match-card" data-type="right" data-val="50%">50%</div></div>
+                                            <div class="col-6"><div class="match-card" data-type="left" data-val="1/4">$\frac{1}{4}$ бөлігі</div></div>
+                                            <div class="col-6"><div class="match-card" data-type="right" data-val="25%">25%</div></div>
+                                            <div class="col-6"><div class="match-card" data-type="left" data-val="1/1">Бүтін (1)</div></div>
+                                            <div class="col-6"><div class="match-card" data-type="right" data-val="100%">100%</div></div>
+                                        </div>
+                                        <button class="btn btn-sm btn-success mt-3" onclick="checkPercentMatch()">Тексеру</button>
+                                        <div id="percent-match-feedback" class="feedback"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="custom-card">
+                                <div class="card-header-gradient g2">2.4 Математикалық ойындар</div>
+                                <div class="card-body">
+                                    <div class="p-3 border rounded mb-3 bg-light">
+                                        <h5 class="text-primary fw-bold"><i class="fas fa-tags me-2"></i>1-ойын: «Дүкендегі жеңілдіктер»</h5>
+                                        <p>Ойыншық қонжық 10000 тг тұрады. Оған 30% жеңілдік жасалса, жаңа бағасы қанша болады?</p>
+                                        <input type="number" id="game-p1-input" class="form-control w-25 d-inline-block" placeholder="Бағасы">
+                                        <button class="btn btn-primary" onclick="playGamePercent1()">Сатып алу</button>
+                                        <div id="game-p1-feedback" class="mt-2 fw-bold"></div>
+                                    </div>
+                                    <div class="p-3 border rounded bg-light">
+                                        <h5 class="text-primary fw-bold"><i class="fas fa-star me-2"></i>2-ойын: «Пайыздарды жина»</h5>
+                                        <p>Қай санның 10%-ы 40-қа тең болады?</p>
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-outline-success" onclick="playGamePercent2(400)">400</button>
+                                            <button class="btn btn-outline-success" onclick="playGamePercent2(40)">40</button>
+                                            <button class="btn btn-outline-success" onclick="playGamePercent2(200)">200</button>
+                                        </div>
+                                        <div id="game-p2-feedback" class="mt-2 fw-bold"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="custom-card">
+                                <div class="card-header-gradient g3">2.5 Тест (10 сұрақ)</div>
+                                <div class="card-body" id="percent-test-container"></div>
+                                <div class="card-footer bg-white text-center">
+                                    <button class="btn btn-success rounded-pill px-4" onclick="checkTest('percent')">Тестіні аяқтау</button>
+                                    <div id="percent-test-result" class="mt-2 fw-bold fs-5 text-success"></div>
+                                </div>
+                            </div>
+
+                            <div class="custom-card">
+                                <div class="card-header-gradient">2.6 Қайталау сұрақтары</div>
+                                <div class="card-body">
+                                    <ol class="list-group list-group-numbered">
+                                        <li class="list-group-item">Пайыз дегеніміз не? <br><small class="text-success">Жауабы: Санның жүзден бір бөлігі.</small></li>
+                                        <li class="list-group-item">50% бөлшекпен көрсеткенде қандай мағына береді? <br><small class="text-success">Жауабы: Жартысы ($\frac{1}{2}$).</small></li>
+                                        <li class="list-group-item">Санның 10%-ын тез табу үшін оны қандай санға бөлеміз? <br><small class="text-success">Жауабы: 10-ға бөлеміз.</small></li>
+                                        <li class="list-group-item">0,25 ондық бөлшегі неше пайызға тең? <br><small class="text-success">Жауабы: 25%.</small></li>
+                                        <li class="list-group-item">Тауардың бағасы 100% болса, оған 10% қосылғаннан кейін бағасы неше пайыз болады? <br><small class="text-success">Жауабы: 110%.</small></li>
+                                        <li class="list-group-item">Мектептегі оқушылардың 100%-ы нені білдіреді? <br><small class="text-success">Жауабы: Барлық оқушыларды.</small></li>
+                                        <li class="list-group-item">Санның 200%-ы осы саннан неше есе үлкен? <br><small class="text-success">Жауабы: 2 есе үлкен.</small></li>
+                                        <li class="list-group-item">Пайызды ондық бөлшекке қалай айналдырамыз? <br><small class="text-success">Жауабы: 100-ге бөлу арқылы.</small></li>
+                                        <li class="list-group-item">Егер санның 50%-ы 25 болса, санның өзі нешеге тең? <br><small class="text-success">Жауабы: 50.</small></li>
+                                        <li class="list-group-item">Бүтін алманың 75%-ы желінді. Қанша пайызы қалды? <br><small class="text-success">Жауабы: 25% қалды.</small></li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="nav-sets" role="tabpanel">
+                            <h2 class="fw-bold text-warning mb-4">3-бөлім: Жиындарға байланысты мәтіндік есептер</h2>
+                            
+                            <div class="custom-card">
+                                <div class="card-header-gradient g3">3.1 Теориялық түсініктеме және Эйлер-Венн сызбасы</div>
+                                <div class="card-body">
+                                    <p class="fs-5"><strong>Жиын</strong> – белгілі бір ортақ қасиеттері бойынша біріктірілген нысандар тобы. Жиындарды көрнекі көрсету үшін <strong>Эйлер-Венн шеңберлері (диаграммасы)</strong> қолданылады.</p>
+                                    
+                                    <div class="text-center fw-bold mt-4 mb-2 text-primary"><i class="fas fa-project-diagram me-2"></i>Эйлер-Венн шеңберлерінің құрылымы:</div>
+                                    <div class="venn-container">
+                                        <div class="venn-label-top">Жалпы бірігу аймағы ($A \cup B$)</div>
+                                        <div class="venn-circle venn-a">
+                                            <span>$A$ жиыны</span>
+                                            <span class="small text-muted"></span>
+                                        </div>
+                                        <div class="venn-circle venn-b">
+                                            <span style="width: 100%; text-align: right;">$B$ жиыны</span>
+                                            <span class="small text-muted" style="width: 100%; text-align: right;"></span>
+                                        </div>
+                                        <div class="venn-intersection">
+                                            <br>
+                                        </div>
+                                    </div>
+
+                                    <div class="formula-box my-4 text-center" style="background: #fef9e7; border-left-color: #f1c40f;">
+                                        Негізгі формула: $$n(A \cup B) = n(A) + n(B) - n(A \cap B)$$
+                                        Мұндағы:<br>
+                                        $\cup$ – жиындардың бірігуі (барлық элементтер саны)<br>
+                                        $\cap$ – жиындардың қиылысуы (ортақ элементтер саны)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="custom-card">
+                                <div class="card-header-gradient">3.2 Үлгі есептер (Сызбалық талдаумен)</div>
+                                <div class="card-body">
+                                    <div class="p-3 border-bottom">
+                                        <h6 class="fw-bold text-warning">Есеп №1: Тіл үйірмелері</h6>
+                                        <p><strong>Шарт:</strong> Сыныпта 15 бала ағылшын тілін ($A$), 12 бала француз тілін ($B$) үйренеді. 5 бала екі тілді де қатар оқиды ($A \cap B$). Сыныпта барлығы неше бала бар?</p>
+                                        
+                                        <div class="venn-container" style="height: 180px; transform: scale(0.9);">
+                                            <div class="venn-circle venn-a" style="padding-left: 20px;"><span>Ағылшын</span><span class="badge bg-primary">10</span></div>
+                                            <div class="venn-circle venn-b" style="padding-right: 20px;"><span style="width:100%; text-align:right;">Француз</span><span class="badge bg-danger" style="float:right;">7</span></div>
+                                            <div class="venn-intersection"><span class="badge bg-dark">5</span></div>
+                                        </div>
+
+                                        <p class="small text-muted"><strong>Шешуі (Қадамдық):</strong><br>
+                                        1-қадам: Тек қана ағылшын тілін оқитындар: $15 - 5 = 10$ бала.<br>
+                                        2-қадам: Тек қана француз тілін оқитындар: $12 - 5 = 7$ бала.<br>
+                                        3-қадам: Барлық бала саны (Бірігуі): $10 + 7 + 5 = 22$ бала.<br>
+                                        (Немесе формуламен: $15 + 12 - 5 = 22$).<br>
+                                        <strong>Жауабы:</strong> 22 бала.</p>
+                                    </div>
+                                    <div class="p-3 border-bottom">
+                                        <h6 class="fw-bold text-warning">Есеп №2: Спортшылар</h6>
+                                        <p><strong>Шарт:</strong> Лагерьдегі 20 баланың 12-сі футболға, 10-ы баскетболға қатысады. Неше бала екі спорт түрімен де айналысады?</p>
+                                        <p class="small text-muted"><strong>Шешуі:</strong> Үйірмелердің қосындысынан жалпы баланы азайтамыз: $(12 + 10) - 20 = 2$ бала.<br><strong>Жауабы:</strong> 2 бала.</p>
+                                    </div>
+                                    <div class="p-3 border-bottom">
+                                        <h6 class="fw-bold text-warning">Есеп №3: Дүкендегі жемістер</h6>
+                                        <p><strong>Шарт:</strong> 18 адам алма, 14 адам алмұрт сатып алды. 6 адам екі жемісті де алды. Барлығы қанша сатып алушы болды?</p>
+                                        <p class="small text-muted"><strong>Шешуі:</strong> Формула бойынша: $18 + 14 - 6 = 26$ адам.<br><strong>Жауабы:</strong> 26 адам.</p>
+                                    </div>
+                                    <div class="p-3 border-bottom">
+                                        <h6 class="fw-bold text-warning">Есеп №4: Балмұздақ</h6>
+                                        <p><strong>Шарт:</strong> 10 бала шоколадты, 8 бала қаймақты балмұздақты таңдады. Олардың ішінде 3 бала екі түрін де алды. Балмұздақ алған жалпы бала саны қанша?</p>
+                                        <p class="small text-muted"><strong>Шешуі:</strong> $10 + 8 - 3 = 15$ бала.<br><strong>Жауабы:</strong> 15 бала.</p>
+                                    </div>
+                                    <div class="p-3">
+                                        <h6 class="fw-bold text-warning">Есеп №5: Тек қана бір жеміс</h6>
+                                        <p><strong>Шарт:</strong> №3 есептің шарты бойынша, тек қана алма сатып алған адамдар санын тап.</p>
+                                        <p class="small text-muted"><strong>Шешуі:</strong> Жалпы алма алғандардан ортақ адамдарды азайтамыз: $18 - 6 = 12$ адам.<br><strong>Жауабы:</strong> 12 адам.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="custom-card">
+                                <div class="card-header-gradient g2">3.3 Интерактивті сызбалық тапсырма</div>
+                                <div class="card-body">
+                                    <div class="p-3 border rounded">
+                                        <h6>Сызбаға қарап, дұрыс жауапты таңда:</h6>
+                                        <p>Төмендегі екі шеңбердің қиылысу (ортақ) аймағы математикалық тілде қалай аталады және қандай белгімен жазылады?</p>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="set-rad" id="set-rad-1" value="incorrect">
+                                            <label class="form-check-label" for="set-rad-1">Жиындардың бірігуі ($\cup$)</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="set-rad" id="set-rad-2" value="correct">
+                                            <label class="form-check-label" for="set-rad-2">Жиындардың қиылысуы ($\cap$)</label>
+                                        </div>
+                                        <button class="btn btn-sm btn-warning mt-2 text-dark fw-bold" onclick="checkSetRadio()">Тексеру</button>
+                                        <div id="set-radio-feedback" class="feedback"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="custom-card">
+                                <div class="card-header-gradient g3">3.4 Математикалық ойындар</div>
+                                <div class="card-body">
+                                    <div class="p-3 border rounded mb-3 bg-light">
+                                        <h5 class="text-danger fw-bold"><i class="fas fa-layer-group me-2"></i>1-ойын: «Жиындарды біріктір»</h5>
+                                        <p>A жиынында {1, 2, 3}, ал B жиынында {3, 4, 5} элементтері бар. Олардың бірігуінде ($A \cup B$) неше бірегей элемент болады?</p>
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-outline-danger" onclick="playGameSets1(6)">6 элемент</button>
+                                            <button class="btn btn-outline-danger" onclick="playGameSets1(5)">5 элемент</button>
+                                            <button class="btn btn-outline-danger" onclick="playGameSets1(3)">3 элемент</button>
+                                        </div>
+                                        <div id="game-s1-feedback" class="mt-2 fw-bold"></div>
+                                    </div>
+                                    <div class="p-3 border rounded bg-light">
+                                        <h5 class="text-danger fw-bold"><i class="fas fa-dot-circle me-2"></i>2-ойын: «Элементтерді орналастыр»</h5>
+                                        <p>Жұп сандар жиыны мен 10-нан кіші сандар жиыны берілген. <strong>6</strong> саны қай аймаққа орналасады?</p>
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-outline-dark" onclick="playGameSets2('ортақ')">Қиылысу (ортақ бөлік)</button>
+                                            <button class="btn btn-outline-dark" onclick="playGameSets2('тек жұп')">Тек жұп сандарға</button>
+                                        </div>
+                                        <div id="game-s2-feedback" class="mt-2 fw-bold"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="custom-card">
+                                <div class="card-header-gradient">3.5 Тест (10 сұрақ)</div>
+                                <div class="card-body" id="sets-test-container"></div>
+                                <div class="card-footer bg-white text-center">
+                                    <button class="btn btn-warning rounded-pill px-4 text-dark fw-bold" onclick="checkTest('sets')">Тестіні аяқтау</button>
+                                    <div id="sets-test-result" class="mt-2 fw-bold fs-5 text-success"></div>
+                                </div>
+                            </div>
+
+                            <div class="custom-card">
+                                <div class="card-header-gradient g2">3.6 Қайталау сұрақтары</div>
+                                <div class="card-body">
+                                    <ol class="list-group list-group-numbered">
+                                        <li class="list-group-item">Жиын элементі деген не? <br><small class="text-success">Жауабы: Жиынды құрайтын объектілер.</small></li>
+                                        <li class="list-group-item">Бос жиын дегенді қалай түсінесің? <br><small class="text-success">Жауабы: Бірде-бір элементі жоқ жиын.</small></li>
+                                        <li class="list-group-item">Эйлер-Венн диаграммасы не үшін керек? <br><small class="text-success">Жауабы: Жиындардың қатынасын көрнекі көрсету үшін.</small></li>
+                                        <li class="list-group-item">Жиындардың қиылысу белгісі қандай? <br><small class="text-success">Жауабы: $\cap$.</small></li>
+                                        <li class="list-group-item">Жиындардың бірігуі белгісі қандай? <br><small class="text-success">Жауабы: $\cup$.</small></li>
+                                        <li class="list-group-item">Егер А жиыны Б жиынының ішінде толық орналасса, бұл қалай аталады? <br><small class="text-success">Жауабы: Ішкі жиын.</small></li>
+                                        <li class="list-group-item">{2, 4, 6} жиынында неше элемент бар? <br><small class="text-success">Жауабы: 3 элемент.</small></li>
+                                        <li class="list-group-item">Бірдей элементтер жиын ішінде қайталанып жазыла ма? <br><small class="text-success">Жауабы: Жоқ, тек бір рет есептеледі.</small></li>
+                                        <li class="list-group-item">Екі жиынның ортақ элементі болмаса, олардың қиылысуы неге тең? <br><small class="text-success">Жауабы: Бос жиынға.</small></li>
+                                        <li class="list-group-item">Сандар жиынына мысал келтір. <br><small class="text-success">Жауабы: Натурал сандар жиыны.</small></li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let totalStars = 0;
+        let totalScore = 0;
+        let completedActivities = new Set();
+
+        const testDatabase = {
+            work: [
+                { q: "Асан жұмысты 3 сағатта, Үсен 6 сағатта бітіреді. Бірге жұмыс істесе неше сағатта бітіреді?", a: ["2 сағат", "4 сағат", "4.5 сағат", "5 сағат"], correct: 0 },
+                { q: "Өнімділік формуласын көрсет:", a: ["v = A / t", "A = v / t", "t = v * A", "v = A * t"], correct: 0 },
+                { q: "Жұмыс көлемі белгісіз жағдайда оны нешеге теңестіреміз?", a: ["0", "1", "100", "10"], correct: 1 },
+                { q: "Бірінші құбыр хауызды 2 сағатта толтырады. Оның 1 сағаттағы өнімділігі қандай?", a: ["1/2", "2/1", "1/4", "1"], correct: 0 },
+                { q: "Шебер 1 сағатта 8 бөлшек жасаса, бұл оның қандай шамасы?", a: ["Жұмысы", "Уақыты", "Өнімділігі", "Жылдамдығы"], correct: 2 },
+                { q: "Екі жұмысшының өнімділіктері 1/5 және 1/10. Бірлескен өнімділігі неше?", a: ["3/10", "2/5", "1/15", "2/15"], correct: 0 },
+                { q: "Жұмысшы 4 сағатта 20 орындық жасады. Өнімділігі қандай?", a: ["5 орындық/сағат", "80 орындық/сағат", "4 орындық/сағат", "10 орындық/сағат"], correct: 0 },
+                { q: "Егер жұмыс 12 сағатта бітсе, оның жартысы қанша уақытта орындалады?", a: ["6 сағат", "4 сағат", "3 сағат", "2 сағат"], correct: 0 },
+                { q: "Сорғы 1 минутта 10 л су сорады. 50 л суды қанша уақытта сорады?", a: ["5 минут", "10 минут", "2 минут", "50 минут"], correct: 0 },
+                { q: "Бірлескен жұмыс есептерінде уақытты табу үшін не істейміз?", a: ["Жұмысты өнімділікке бөлеміз", "Өнімділікті уақытқа көбейтеміз", "Шамаларды қосамыз", "Азайтамыз"], correct: 0 }
+            ],
+            percent: [
+                { q: "Санның 1% неге тең?", a: ["Жүзден бір бөлігі", "Оннан бір бөлігі", "Екіден бір бөлігі", "Төрттен бір бөлігі"], correct: 0 },
+                { q: "200-дің 10%-ын тап:", a: ["20", "10", "2", "40"], correct: 0 },
+                { q: "Кітап бағасы 2000 тг. Ол 50%-ға арзандаса, жаңа бағасы қандай?", a: ["1000 тг", "1500 тг", "500 тг", "1200 тг"], correct: 0 },
+                { q: "0,5 ондық бөлшегі неше пайыз?", a: ["50%", "5%", "0.5%", "500%"], correct: 0 },
+                { q: "Санның ширегі (1/4 бөлігі) неше пайызды құрайды?", a: ["25%", "50%", "75%", "100%"], correct: 0 },
+                { q: "Қай санның 20%-ы 40-қа тең?", a: ["200", "100", "80", "150"], correct: 0 },
+                { q: "Сыныптағы 25 оқушының 100%-ы саяхатқа барды. Неше бала барды?", a: ["25", "20", "15", "0"], correct: 0 },
+                { q: "50-дің 20%-ын есепте:", a: ["10", "5", "20", "15"], correct: 0 },
+                { q: "Тауар бағасы 500 тг-ден 600 тг-ге өсті. Баға неше пайызға өсті?", a: ["20%", "10%", "15%", "25%"], correct: 0 },
+                { q: "Пайыз белгісін көрсет:", a: ["%", "$", "&", "#"], correct: 0 }
+            ],
+            sets: [
+                { q: "Жиындардың ортақ элементтері қалай аталады?", a: ["Қиылысу", "Бірігу", "Ішкі жиын", "Бос жиын"], correct: 0 },
+                { q: "Екі жиынның барлық элементтерін біріктіру қалай аталады?", a: ["Бірігу", "Қиылысу", "Айырым", "Теңдік"], correct: 0 },
+                { q: "Бос жиынның белгісін тап:", a: ["Ø", "∩", "∪", "∈"], correct: 0 },
+                { q: "A={1,2} excavations B={2,3} жиындарының қиылысуын тап:", a: ["{2}", "{1,2,3}", "{1,3}", "Ø"], correct: 0 },
+                { q: "Диаграммаларды ойлап тапқан ғалым кім?", a: ["Эйлер мен Венн", "Пифагор", "Ньютон", "Әл-Фараби"], correct: 0 },
+                { q: "Сыныпта 10 бала спортқа, 8 бала музыкаға қатысады. 3 бала екеуіне де барады. Барлығы неше бала?", a: ["15", "18", "21", "13"], correct: 0 },
+                { q: "Жиынды құрайтын нысандар қалай аталады?", a: ["Элементтер", "Сандар", "Нүктелер", "Жиынтықтар"], correct: 0 },
+                { q: "Апта күндері жиынында неше элемент бар?", a: ["7", "30", "12", "365"], correct: 0 },
+                { q: "Егер А жиыны {2, 4} болса, оның ішкі жиынын көрсет:", a: ["{2}", "{3}", "{5}", "{1,2}"], correct: 0 },
+                { q: "Бір таңбалы жұп сандар жиынында неше элемент бар?", a: ["4", "5", "9", "10"], correct: 0 }
+            ]
+        };
+
+        function switchMainTab(target) {
+            document.querySelectorAll('.main-tab-view').forEach(el => el.style.display = 'none');
+            document.getElementById(target + '-view').style.display = 'block';
+        }
+
+        function openSectionDirectly(tabId) {
+            switchMainTab('content-page');
+            const triggerEl = document.getElementById(tabId);
+            if (triggerEl) {
+                const tab = new bootstrap.Tab(triggerEl);
+                tab.show();
+            }
+        }
+
+        function renderTests() {
+            for (let category in testDatabase) {
+                const container = document.getElementById(`${category}-test-container`);
+                if (!container) continue;
+                container.innerHTML = '';
+                
+                testDatabase[category].forEach((item, index) => {
+                    let qBlock = document.createElement('div');
+                    qBlock.className = 'mb-4 p-3 border rounded bg-white shadow-sm';
+                    qBlock.innerHTML = `<h6><strong>№${index + 1}:</strong> ${item.q}</h6>`;
+                    
+                    let optionsDiv = document.createElement('div');
+                    optionsDiv.className = 'd-flex flex-column gap-2 mt-2';
+                    
+                    item.a.forEach((opt, optIndex) => {
+                        optionsDiv.innerHTML += `
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="${category}-q-${index}" id="${category}-q-${index}-${optIndex}" value="${optIndex}">
+                                <label class="form-check-label" for="${category}-q-${index}-${optIndex}">${opt}</label>
+                            </div>
+                        `;
+                    });
+                    
+                    qBlock.appendChild(optionsDiv);
+                    container.appendChild(qBlock);
+                });
+            }
+        }
+
+        function checkTest(category) {
+            const list = testDatabase[category];
+            let correctCount = 0;
+            list.forEach((item, index) => {
+                const selected = document.querySelector(`input[name="${category}-q-${index}"]:checked`);
+                if (selected && parseInt(selected.value) === item.correct) correctCount++;
+            });
+            document.getElementById(`${category}-test-result`).innerHTML = `Нәтиже: 10 сұрақтан ${correctCount} дұрыс жауап!`;
+            if (!completedActivities.has(category + '-test') && correctCount >= 5) {
+                completedActivities.add(category + '-test');
+                updateRewards(correctCount * 10, 1);
+            }
+        }
+
+        function updateRewards(score, stars) {
+            totalScore += score; totalStars += stars;
+            document.getElementById('global-score').innerText = totalScore + ' ұпай';
+            document.getElementById('global-stars').innerText = totalStars;
+            let progress = Math.min((totalScore / 300) * 100, 100);
+            document.getElementById('main-progress-bar').style.width = progress + '%';
+            document.getElementById('progress-percent').innerText = Math.round(progress) + '%';
+            let rank = "Бастаушы";
+            if (totalScore >= 100) rank = "Білгір 🚀";
+            if (totalScore >= 200) rank = "Сарапшы 🏆";
+            document.getElementById('global-rank').innerText = rank;
+        }
+
+        function checkWorkBlank() {
+            const val = document.getElementById('work-blank-1').value.trim().toLowerCase();
+            const feedback = document.getElementById('work-blank-feedback');
+            feedback.style.display = 'block';
+            if (val === 'бөлу' || val === 'бөлуге') {
+                feedback.innerHTML = "Жарайсың! Дұрыс жауап.", feedback.className = "feedback text-success";
+                updateRewards(20, 1);
+            } else {
+                feedback.innerHTML = "Қате. (көмек: бөлу).", feedback.className = "feedback text-danger";
+            }
+        }
+
+        function allowDrop(ev) { ev.preventDefault(); }
+        document.addEventListener("DOMContentLoaded", () => { renderTests(); });
+        function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+        function drop(ev, targetId) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            if (data === targetId) {
+                ev.target.appendChild(document.getElementById(data));
+                ev.target.style.background = "#d4edda";
+            }
+        }
+        function checkDragWork() {
+            const feedback = document.getElementById('work-drag-feedback');
+            feedback.style.display = 'block';
+            if (document.getElementById('drop-v').contains(document.getElementById('dragV')) &&
+                document.getElementById('drop-a').contains(document.getElementById('dragA')) &&
+                document.getElementById('drop-t').contains(document.getElementById('dragT'))) {
+                feedback.innerHTML = "Керемет! Барлық элементтер дұрыс табылған!", feedback.className = "feedback text-success";
+                updateRewards(30, 1);
+            } else {
+                feedback.innerHTML = "Кейбір элементтер қате орналасқан.", feedback.className = "feedback text-danger";
+            }
+        }
+
+        let selectedCards = [];
+        document.querySelectorAll('#percent-match-zone .match-card').forEach(card => {
+            card.addEventListener('click', function() {
+                if (this.classList.contains('correct')) return;
+                this.classList.toggle('selected');
+                let type = this.getAttribute('data-type');
+                let val = this.getAttribute('data-val');
+                selectedCards.push({el: this, type: type, val: val});
+                if (selectedCards.length === 2) {
+                    let c1 = selectedCards[0]; let c2 = selectedCards[1];
+                    if (c1.type !== c2.type && (
+                        (c1.val === '1/2' && c2.val === '50%') || (c1.val === '50%' && c2.val === '1/2') ||
+                        (c1.val === '1/4' && c2.val === '25%') || (c1.val === '25%' && c1.val === '1/4') ||
+                        (c1.val === '1/1' && c2.val === '100%') || (c1.val === '100%' && c2.val === '1/1')
+                    )) {
+                        c1.el.className = "match-card correct"; c2.el.className = "match-card correct";
+                    } else {
+                        c1.el.classList.remove('selected'); c2.el.classList.remove('selected');
+                    }
+                    selectedCards = [];
+                }
+            });
+        });
+
+        function checkPercentMatch() {
+            const feedback = document.getElementById('percent-match-feedback');
+            feedback.style.display = 'block';
+            let corrects = document.querySelectorAll('#percent-match-zone .match-card.correct').length;
+            if (corrects === 6) {
+                feedback.innerHTML = "Тамаша! Барлық бөлшектер сәйкес келді.", feedback.className = "feedback text-success";
+                updateRewards(30, 1);
+            } else {
+                feedback.innerHTML = "Әлі толық аяқталған жоқ.", feedback.className = "feedback text-warning";
+            }
+        }
+
+        function checkSetRadio() {
+            const selected = document.querySelector('input[name="set-rad"]:checked');
+            const feedback = document.getElementById('set-radio-feedback');
+            feedback.style.display = 'block';
+            if (selected && selected.value === 'correct') {
+                feedback.innerHTML = "Дұрыс! Ортақ элементтер қиылысу жиынын құрайды.", feedback.className = "feedback text-success";
+                updateRewards(25, 1);
+            } else {
+                feedback.innerHTML = "Қате жауап, қайта ойлан.", feedback.className = "feedback text-danger";
+            }
+        }
+
+        function playGame1(ans) {
+            const f = document.getElementById('game1-feedback');
+            if (ans === 12) {
+                f.innerHTML = "🎉 Керемет! Жауабы 12 сағат. Дуал қаланды!", f.className = "text-success mt-2 fw-bold";
+                updateRewards(20, 1);
+            } else { f.innerHTML = "❌ Қате. Қайта ойланып көр.", f.className = "text-danger mt-2 fw-bold"; }
+        }
+
+        function playGame2() {
+            const val = document.getElementById('game2-input').value;
+            const f = document.getElementById('game2-feedback');
+            if (parseInt(val) === 6) {
+                f.innerHTML = "🎯 Дұрыс! 30 ойыншық 6 минутта дайын болады!", f.className = "text-success mt-2 fw-bold";
+                updateRewards(20, 1);
+            } else { f.innerHTML = "❌ Қате уақыт.", f.className = "text-danger mt-2 fw-bold"; }
+        }
+
+        function playGamePercent1() {
+            const val = document.getElementById('game-p1-input').value;
+            const f = document.getElementById('game-p1-feedback');
+            if (parseInt(val) === 7000) {
+                f.innerHTML = "🛍️ Керемет! Жаңа бағасы: 7000 тг.", f.className = "text-success mt-2 fw-bold";
+                updateRewards(25, 1);
+            } else { f.innerHTML = "❌ Бағасы қате.", f.className = "text-danger mt-2 fw-bold"; }
+        }
+
+        function playGamePercent2(ans) {
+            const f = document.getElementById('game-p2-feedback');
+            if (ans === 400) {
+                f.innerHTML = "🌟 Дұрыс! 400-дің 10%-ы 40 болады.", f.className = "text-success mt-2 fw-bold";
+                updateRewards(20, 1);
+            } else { f.innerHTML = "❌ Бұл сан емес.", f.className = "text-danger mt-2 fw-bold"; }
+        }
+
+        function playGameSets1(ans) {
+            const f = document.getElementById('game-s1-feedback');
+            if (ans === 5) {
+                f.innerHTML = "🎉 Дұрыс! Бірігу жиынында 5 бірегей элемент бар.", f.className = "text-success mt-2 fw-bold";
+                updateRewards(20, 1);
+            } else { f.innerHTML = "❌ Қате. Ортақ элемент қайталанбайды.", f.className = "text-danger mt-2 fw-bold"; }
+        }
+
+        function playGameSets2(ans) {
+            const f = document.getElementById('game-s2-feedback');
+            if (ans === 'ортақ') {
+                f.innerHTML = "🎯 Дәл солай! 6 саны қиылысу аймағына орналасады.", f.className = "text-success mt-2 fw-bold";
+                updateRewards(20, 1);
+            } else { f.innerHTML = "❌ Қайта ойлан.", f.className = "text-danger mt-2 fw-bold"; }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
